@@ -120,7 +120,7 @@
   .heard{display:block;font-family:'Nunito';font-weight:700;font-size:.95rem;color:#8AA0B8;margin-top:3px}
 
   /* ---------- CONTROLS ---------- */
-  .controls{display:flex;align-items:center;gap:clamp(24px,7vw,50px);padding:16px 0 clamp(22px,4vh,38px)}
+  .controls{display:flex;align-items:center;gap:clamp(24px,7vw,50px);padding:16px 0 14px}
   .ctrl{display:flex;flex-direction:column;align-items:center;gap:10px}
   .ctrl-label{font-weight:800;font-size:.95rem;color:#3E5C76}
   .btn{border:none;cursor:pointer;border-radius:50%;display:grid;place-items:center;color:#fff;
@@ -138,6 +138,16 @@
     font-family:'Baloo 2';font-weight:800;font-size:clamp(2.4rem,9vw,3.2rem);line-height:1;padding-bottom:.18em;
     box-shadow:0 7px 0 var(--yellow-d),0 14px 20px rgba(224,168,0,.3)}
   .btn-help:active:not(:disabled){box-shadow:0 2px 0 var(--yellow-d)}
+
+  /* ---------- PARENT CONTROLS (subtle, for grown-ups) ---------- */
+  .parent-bar{display:flex;align-items:center;gap:10px;padding-bottom:clamp(14px,3vh,26px)}
+  .parent-tag{font-weight:800;font-size:.68rem;letter-spacing:1.2px;text-transform:uppercase;color:#9FB3C8}
+  .btn-parent{background:#fff;border:2px solid #CBD9E8;color:#5C7A9E;font-family:'Nunito',sans-serif;
+    font-weight:800;font-size:.9rem;border-radius:999px;padding:9px 18px;cursor:pointer;
+    box-shadow:0 3px 0 rgba(29,53,87,.1);transition:transform .1s,box-shadow .1s,border-color .2s,color .2s;
+    touch-action:manipulation}
+  .btn-parent:hover{border-color:#8FA9C4;color:#3E5C76}
+  .btn-parent:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(29,53,87,.1)}
 
   .note{margin-top:4px;background:#FFF9DB;border:2px dashed #F5C842;color:#7A5900;font-weight:700;
     font-size:.85rem;padding:8px 14px;border-radius:12px;max-width:min(680px,90vw);text-align:center;display:none}
@@ -255,6 +265,11 @@
     </div>
   </div>
 
+  <div class="parent-bar">
+    <span class="parent-tag">Parent</span>
+    <button class="btn-parent" id="parentBtn" aria-label="Parent: mark word correct and go to next">✓ Mark correct · next word</button>
+  </div>
+
   <p class="note" id="noSrNote">This browser can’t listen yet — try Chrome. Tap the word to hear it, and tap ? anytime.</p>
 </div>
 
@@ -304,6 +319,9 @@
 
   /* ---------- state ---------- */
   var deck=[], current="", state="idle", mastered=new Set(), moodTimer=null;
+  var pendingTimer=null, fbKind=null;
+
+  function clearPending(){ if(pendingTimer){ clearTimeout(pendingTimer); pendingTimer=null; } }
 
   function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i];a[i]=a[j];a[j]=t; } return a; }
 
@@ -330,6 +348,7 @@
     helpBtn.disabled= s!=="idle";
   }
   function newGame(){
+    clearPending();
     mastered.clear(); deck=shuffle(WORDS.slice()); renderChips();
     overlay.classList.remove("show"); stopCelebrate();
     nextWord();
@@ -341,8 +360,8 @@
     card.classList.remove("pop"); void card.offsetWidth; card.classList.add("pop");
     clearFeedback(); owlMood(null); setState("idle");
   }
-  function showFeedback(msg,kind){ fb.textContent=msg; fb.className="feedback show "+kind; }
-  function clearFeedback(){ fb.className="feedback"; fb.textContent=""; }
+  function showFeedback(msg,kind){ fb.textContent=msg; fb.className="feedback show "+kind; fbKind=kind; }
+  function clearFeedback(){ fb.className="feedback"; fb.textContent=""; fbKind=null; }
 
   function owlMood(m,ms){
     owlEl.classList.remove("mood-happy","mood-listen");
@@ -352,16 +371,17 @@
   }
 
   function onCorrect(){
-    setState("feedback"); owlMood("mood-happy",2000);
+    setState("feedback"); fbKind="good"; owlMood("mood-happy",2000);
     showFeedback(pick(GOOD),"good"); sfxCorrect();
     var r=card.getBoundingClientRect();
     burst(r.left+r.width/2, r.top+r.height/2, 140);
     mastered.add(current); renderChips();
-    setTimeout(function(){ clearFeedback(); nextWord(); },2100);
+    clearPending();
+    pendingTimer=setTimeout(function(){ clearFeedback(); nextWord(); },2100);
   }
 
   function gentle(msg){
-    setState("feedback");
+    setState("feedback"); fbKind="try";
     fb.className="feedback show try";
     fb.textContent=msg;
     var h=lastHeard();
@@ -372,7 +392,8 @@
       fb.appendChild(s);
     }
     sfxWrong();
-    setTimeout(function(){ clearFeedback(); setState("idle"); },2000);
+    clearPending();
+    pendingTimer=setTimeout(function(){ clearFeedback(); setState("idle"); },2000);
   }
 
   /* ---------- speech: say the word (TTS) ---------- */
@@ -398,7 +419,7 @@
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if(!SR){ note.classList.add("show"); card.classList.add("tap-to-hear"); }
 
-  var heard=[];
+  var heard=[], activeRec=null, isListening=false;
   function lastHeard(){
     if(!heard.length) return "";
     var u=[]; heard.forEach(function(x){ if(u.indexOf(x)===-1) u.push(x); });
@@ -449,6 +470,16 @@
     fb.appendChild(t);
   }
 
+  function finishListening(){
+    if(!isListening) return;
+    isListening=false;
+    try{ activeRec.abort(); }catch(e){}
+    activeRec=null;
+    micBtn.classList.remove("listening");
+    micLabel.textContent="Say the word";
+    owlMood(null);
+  }
+
   function startListening(){
     if(!SR || state!=="idle") return;
 
@@ -456,22 +487,14 @@
     if("speechSynthesis" in window) speechSynthesis.cancel();
 
     var rec=new SR();
+    activeRec=rec; isListening=true; heard=[];
     rec.lang="en-US";
     rec.continuous=true;      /* keep listening through pauses — slow "s… i… t" speech */
     rec.interimResults=true;  /* match partial results early, before the final transcript */
     rec.maxAlternatives=5;    /* more candidate transcripts to check */
 
-    heard=[];
-    var done=false, listening=true;
-
     setState("listening"); hideBubble(); showListeningUI();
     micBtn.classList.add("listening"); micLabel.textContent="Listening…"; owlMood("mood-listen");
-
-    function finish(){
-      if(done) return; done=true; listening=false;
-      try{ rec.abort(); }catch(e){}
-      micBtn.classList.remove("listening"); micLabel.textContent="Say the word"; owlMood(null);
-    }
 
     /* in continuous mode e.results accumulates — scan everything each time */
     function checkResults(res){
@@ -487,25 +510,25 @@
     }
 
     rec.onresult=function(e){
-      if(done) return;
-      if(checkResults(e.results)){ finish(); onCorrect(); }
+      if(!isListening) return;
+      if(checkResults(e.results)){ finishListening(); onCorrect(); }
     };
     rec.onerror=function(e){
-      if(done) return;
-      finish();
-      if(state!=="idle") return;
+      if(!isListening) return;
+      finishListening();
+      /* always recover to a usable state — never leave the app stuck */
       if(e.error==="no-speech") gentle("I didn't hear that — try again!");
       else if(e.error==="not-allowed"||e.error==="service-not-allowed") gentle("Please let me hear you! 🎤");
       else gentle(pick(TRY));
     };
     rec.onend=function(){
-      if(listening){ finish(); gentle("I didn't hear that — try again!"); }
+      if(isListening){ finishListening(); gentle("I didn't hear that — try again!"); }
     };
 
-    try{ rec.start(); }catch(err){ finish(); setState("idle"); clearFeedback(); }
+    try{ rec.start(); }catch(err){ finishListening(); setState("idle"); clearFeedback(); }
 
     /* generous window for slow speakers */
-    setTimeout(function(){ if(listening && rec){ try{rec.stop();}catch(e){} } },6500);
+    setTimeout(function(){ if(isListening && activeRec===rec){ try{rec.stop();}catch(e){} } },6500);
   }
 
   /* ---------- buttons ---------- */
@@ -516,6 +539,16 @@
     showFeedback("Now say it!","hint");
     setTimeout(function(){ if(state==="idle") clearFeedback(); },1900);
   });
+
+  /* Parent fallback: count the current word as correct and move on.
+     Works from idle, listening (stops it first), or a "try again" message. */
+  $("parentBtn").addEventListener("click", function(){
+    if(state==="listening") finishListening();
+    if(state==="feedback" && fbKind==="good") return; /* already advancing — ignore */
+    clearPending();
+    onCorrect();
+  });
+
   card.addEventListener("click", function(){ if(!SR && state==="idle") speak(current); });
   $("againBtn").addEventListener("click", newGame);
   $("resetBtn").addEventListener("click", function(){ stopCelebrate(); overlay.classList.remove("show"); newGame(); });
@@ -579,6 +612,7 @@
 
   /* ---------- celebration ---------- */
   function celebrate(){
+    clearPending();
     setState("feedback"); clearFeedback();
     overlay.classList.add("show"); sfxWin();
     burst(cvs.width/2, cvs.height*.3, 180);
@@ -594,4 +628,3 @@
 </script>
 </body>
 </html>
-
