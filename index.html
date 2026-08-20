@@ -306,7 +306,8 @@
 <script>
 (function(){
   "use strict";
-  var WORDS = ["the","i","at","and","a","if","it","its","sit","in"];
+  var WORDS = ["the","I","at","and","a","if","it","its","sit","in"];
+  var LOWER_WORDS = WORDS.map(function(w){return w.toLowerCase();});
 
   var $ = function(id){ return document.getElementById(id); };
   var wordEl=$("word"), card=$("card"), fb=$("feedback"), micBtn=$("micBtn"),
@@ -445,17 +446,18 @@
     return d[m][n];
   }
 
-  /* Forgiving but safe matching:
+  /* Forgiving but safe matching (case-insensitive, so "I" works):
      - "s i t", "SIT!", "It's"  -> exact after normalization
      - "uh, sit"                -> target appears as a whole word
      - "six" for "sit", "ant" for "and" -> one-sound-off, 3+ letter words only
      - NEVER accepts another word from this week's list (it != at, its != sit)  */
   function matches(target, raw){
+    var t = target.toLowerCase();   /* match case-insensitively so "I" still works */
     var n=norm(raw), toks=tokens(raw);
-    if(n===target) return true;
-    if(toks.indexOf(target)!==-1) return true;
-    if(n && WORDS.indexOf(n)!==-1) return false;   /* a different list word — reject */
-    if(target.length>=3 && n.length>=2 && lev(n,target)<=1) return true;
+    if(n===t) return true;
+    if(toks.indexOf(t)!==-1) return true;
+    if(n && n!==t && LOWER_WORDS.indexOf(n)!==-1) return false;   /* a different list word — reject */
+    if(t.length>=3 && n.length>=2 && lev(n,t)<=1) return true;
     return false;
   }
 
