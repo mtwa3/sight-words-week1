@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#BDE9FF">
-<title>Sight Word Stars · Week 2</title>
+<title>Sight Word Stars · Home Practice - Lesson 6</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
@@ -41,12 +41,12 @@
 
   /* ---------- LAYOUT ---------- */
   .app{position:relative;z-index:1;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center}
-  .topbar{width:min(680px,94vw);display:flex;justify-content:space-between;align-items:center;padding:14px 6px 8px}
+  .topbar{width:min(680px,94vw);display:flex;justify-content:space-between;align-items:center;padding:14px 6px 8px;flex-wrap:wrap;row-gap:8px}
   .brand{font-family:'Baloo 2';font-weight:800;font-size:clamp(1.15rem,4vw,1.5rem);display:flex;gap:8px;align-items:center}
   .brand .bstar{color:#FFB703;display:inline-block;animation:twinkle 2.4s ease-in-out infinite}
   @keyframes twinkle{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.25) rotate(18deg)}}
   .top-right{display:flex;align-items:center;gap:8px}
-  .week-chip{background:#fff;border-radius:999px;padding:6px 14px;font-weight:800;font-size:.85rem;box-shadow:0 3px 0 rgba(29,53,87,.12)}
+  .week-chip{background:#fff;border-radius:999px;padding:6px 14px;font-weight:800;font-size:.78rem;white-space:nowrap;box-shadow:0 3px 0 rgba(29,53,87,.12)}
   .btn-reset{width:34px;height:34px;border-radius:50%;border:none;background:#fff;box-shadow:0 3px 0 rgba(29,53,87,.12);
     font-size:1.05rem;cursor:pointer;color:var(--soft);transition:transform .3s}
   .btn-reset:hover{transform:rotate(-180deg)}
@@ -204,7 +204,7 @@
   <header class="topbar">
     <div class="brand"><span class="bstar">★</span> Sight Word Stars</div>
     <div class="top-right">
-      <span class="week-chip">Week 2 · 12 words</span>
+      <span class="week-chip">Home Practice - Lesson 6 · 12 words</span>
       <button class="btn-reset" id="resetBtn" title="Start over" aria-label="Start over">↺</button>
     </div>
   </header>
@@ -630,4 +630,3 @@
 </script>
 </body>
 </html>
-
