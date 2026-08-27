@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sight Word Card Generator — Read It / Build It / Write It</title>
+<style>
+  /* ============ EDIT THESE COLORS TO MATCH YOUR BRAND ============ */
+  :root{
+    --dark:  #14532d;   /* header bars + card border (cut line) */
+    --light: transparent; /* card background (transparent = white paper) */
+    --word:  #137a52;   /* the big "Read It" word + model word    */
+    --line:  #14532d;   /* writing guide lines                    */
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;font-family:'Trebuchet MS',Verdana,system-ui,Arial,sans-serif;background:#eef2ee}
+
+  /* ---------- screen-only editor / toolbar ---------- */
+  .editor{max-width:900px;margin:18px auto;padding:16px 18px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+  .editor h1{margin:0 0 4px;font-size:20px;color:var(--dark)}
+  .editor p.tip{margin:4px 0 10px;font-size:13px;color:#555}
+  .editor textarea{width:100%;height:96px;font-size:15px;padding:8px;border:2px solid #cfd8cf;border-radius:6px;resize:vertical}
+  .opts{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:10px;font-size:13px}
+  .opts label{display:flex;align-items:center;gap:5px}
+  .toolbar{display:flex;gap:10px;margin-top:12px}
+  button{font-size:14px;font-weight:700;padding:8px 16px;border:none;border-radius:6px;cursor:pointer}
+  #printBtn{background:var(--dark);color:#fff}
+  #clearBtn{background:#d8e0d8;color:#333}
+  #count{margin-left:auto;align-self:center;font-size:13px;color:#555}
+
+  /* ---------- the printable pages ---------- */
+  #pages{display:flex;flex-direction:column;align-items:center;gap:20px;padding:20px}
+  .page{width:8.5in;height:11in;padding:.35in;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+  .page.empty{display:flex;align-items:center;justify-content:center;color:#888}
+  .grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:0;height:100%}
+
+  /* ---------- one card (cards touch = cut on shared borders) ---------- */
+  .card{border:4px solid var(--dark);background:var(--light);display:flex;flex-direction:column;overflow:hidden}
+  .bar{position:relative;background:var(--dark);color:#fff;font-weight:700;font-size:15px;text-align:center;padding:.13in .25in}
+  .bar .ic{position:absolute;left:.25in;top:50%;transform:translateY(-50%);width:16px;height:16px;display:block}
+  .readword{flex:1;display:flex;align-items:center;justify-content:center;font-size:.5in;font-weight:800;color:var(--word);padding:0 .2in;overflow:hidden}
+  .build{flex:1.2}                       /* blank space for magnetic letters / tiles / beads / dough */
+  .write{position:relative;flex:0 0 1.05in}
+  .line{position:absolute;left:.25in;right:.25in;border-top:2px solid var(--line)}
+  .line.top{top:18%}
+  .line.mid{top:50%;border-top-style:dashed;border-top-width:1.5px}
+  .line.bot{top:82%}
+  .model{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;font-size:.32in;font-weight:700;color:var(--word)}
+
+  /* ---------- "How to Edit" cover page ---------- */
+  .howto{padding:.35in}
+  .howto h2{background:var(--dark);color:#fff;margin:-.35in -.35in .25in;padding:.2in;text-align:center;font-size:24px}
+  .howto p{font-size:13px;line-height:1.5;margin:.2in 0}
+  .howto table{border-collapse:collapse;width:100%;margin:.2in 0}
+  .howto th,.howto td{border:1px solid #999;height:.45in;font-size:13px;text-align:center}
+  .howto th{background:#f0f4f0;font-weight:700}
+
+  /* ---------- screen preview scale (off when printing) ---------- */
+  @media screen{ #pages{zoom:.5} }
+
+  /* ---------- PRINT: only the cards, one page each ---------- */
+  @page{size:letter;margin:0}
+  @media print{
+    body{background:#fff}
+    .editor,.toolbar{display:none!important}
+    #pages{zoom:1;display:block;padding:0;gap:0}
+    .page{box-shadow:none;margin:0;page-break-after:always;break-after:page}
+    .page:last-child{page-break-after:auto;break-after:auto}
+  }
+</style>
+</head>
+<body>
+
+<div class="editor">
+  <h1>Sight Word Card Generator</h1>
+  <p class="tip">Type or paste your sight words below (one per line, or separated by commas). Cards auto‑fill — <b>4 words = 1 page (2×2)</b>, filled left→right, top→bottom. Cards touch edge‑to‑edge: cut the outer edge + the center cross, then laminate.</p>
+  <textarea id="words">the, see, can, my, and, was, for, you</textarea>
+  <div class="opts">
+    <label><input type="checkbox" id="includeHowTo" checked> Include “How to Edit” cover page</label>
+    <label><input type="checkbox" id="showModel"> Print word on Write‑It line (model)</label>
+  </div>
+  <div class="toolbar">
+    <button id="printBtn" onclick="window.print()">🖨 Print</button>
+    <button id="clearBtn" onclick="document.getElementById('words').value='';render()">Clear</button>
+    <span id="count"></span>
+  </div>
+</div>
+
+<div id="pages"></div>
+
+<script>
+const EYE   = '<svg viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="#fff"/></svg>';
+const ABC   = '<svg viewBox="0 0 24 24"><rect x="1" y="5" width="22" height="14" rx="3" fill="none" stroke="#fff" stroke-width="2"/><text x="12" y="16" font-size="9" fill="#fff" text-anchor="middle" font-family="sans-serif">abc</text></svg>';
+const PENCIL= '<svg viewBox="0 0 24 24"><path d="M3 17l10-10 4 4L7 21H3v-4z" fill="none" stroke="#fff" stroke-width="2"/><path d="M14 6l4 4" stroke="#fff" stroke-width="2"/></svg>';
+
+const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+function card(w, showModel){
+  return `<div class="card">
+    <div class="bar"><span class="ic">${EYE}</span>Read It</div>
+    <div class="readword">${esc(w)}</div>
+    <div class="bar"><span class="ic">${ABC}</span>Build It</div>
+    <div class="build"></div>
+    <div class="bar"><span class="ic">${PENCIL}</span>Write It</div>
+    <div class="write">
+      <span class="line top"></span><span class="line mid"></span><span class="line bot"></span>
+      ${showModel ? `<span class="model">${esc(w)}</span>` : ''}
+    </div>
+  </div>`;
+}
+
+function howToPage(){
+  return `<div class="page"><div class="howto">
+    <h2>HOW TO EDIT — AUTO‑FILL</h2>
+    <p>Type your sight words into the list (one per line, or separated by commas). The cards fill in automatically — <b>4 words make one page</b>, laid out 2 across.</p>
+    <table><tr><th>the</th><th>see</th><th>can</th><th>my</th></tr>
+    <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table>
+    <p><b>How to use:</b> Students <b>read</b> the sight word, then <b>build</b> it with magnetic letters, letter tiles, beads, or stamp it in dough, then <b>write</b> the word with a dry‑erase marker.</p>
+    <p>Print → cut along the outer edge and the center cross (the cards touch) → laminate. Perfect for literacy centers, morning tubs, or early‑finisher activities (K &amp; 1st grade).</p>
+  </div></div>`;
+}
+
+function render(){
+  const words = document.getElementById('words').value.split(/[\s,]+/).filter(Boolean);
+  const showModel    = document.getElementById('showModel').checked;
+  const includeHowTo = document.getElementById('includeHowTo').checked;
+
+  let html = includeHowTo ? howToPage() : '';
+  const pages = Math.ceil(words.length / 4);
+  for(let p=0; p<pages; p++){
+    html += '<div class="page"><div class="grid">';
+    for(let c=0; c<4; c++) html += card(words[p*4+c] || '', showModel);
+    html += '</div></div>';
+  }
+  if(words.length===0 && !includeHowTo) html = '<div class="page empty"><p>Type words above to generate cards.</p></div>';
+
+  document.getElementById('pages').innerHTML = html;
+  document.getElementById('count').textContent =
+    words.length + ' word' + (words.length===1?'':'s') + ' → ' + pages + ' page' + (pages===1?'':'s');
+}
+
+['words'].forEach(id => document.getElementById(id).addEventListener('input', render));
+['showModel','includeHowTo'].forEach(id => document.getElementById(id).addEventListener('change', render));
+render();
+</script>
+</body>
+</html>
+
