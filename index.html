@@ -23,7 +23,6 @@
     overflow-x:hidden;-webkit-tap-highlight-color:transparent;user-select:none;
   }
 
-  /* ---------- SCENE (sky, sun, clouds, hills) ---------- */
   .scene{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
   .sun{position:absolute;top:4%;right:5%;width:clamp(72px,13vw,120px);animation:spin 48s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
@@ -39,7 +38,6 @@
   .flower{position:absolute;font-size:clamp(20px,3.4vw,30px);transform-origin:50% 100%;animation:sway 3.2s ease-in-out infinite alternate}
   @keyframes sway{from{transform:rotate(-7deg)}to{transform:rotate(7deg)}}
 
-  /* ---------- LAYOUT ---------- */
   .app{position:relative;z-index:1;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center}
   .topbar{width:min(680px,94vw);display:flex;justify-content:space-between;align-items:center;padding:14px 6px 8px;flex-wrap:wrap;row-gap:8px}
   .brand{font-family:'Baloo 2';font-weight:800;font-size:clamp(1.15rem,4vw,1.5rem);display:flex;gap:8px;align-items:center}
@@ -51,7 +49,6 @@
     font-size:1.05rem;cursor:pointer;color:var(--soft);transition:transform .3s}
   .btn-reset:hover{transform:rotate(-180deg)}
 
-  /* progress chips */
   .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;width:min(680px,94vw)}
   .chip{font-family:'Baloo 2';font-weight:700;font-size:.85rem;background:rgba(255,255,255,.78);color:#93A8C4;
     border-radius:999px;padding:3px 11px;box-shadow:0 2px 0 rgba(29,53,87,.1);transition:background .3s,color .3s}
@@ -61,7 +58,6 @@
   .chip.pop{animation:chipPop .55s cubic-bezier(.34,1.56,.64,1)}
   @keyframes chipPop{0%{transform:scale(1)}50%{transform:scale(1.35) rotate(-6deg)}100%{transform:scale(1)}}
 
-  /* ---------- WORD AREA ---------- */
   .word-area{display:flex;align-items:center;gap:clamp(10px,3vw,26px);margin:auto 0;width:min(680px,94vw)}
   .owl{width:clamp(92px,26vw,150px);flex:none;position:relative}
   .bob{animation:bob 3.2s ease-in-out infinite}
@@ -99,7 +95,6 @@
   @keyframes cardPop{0%{transform:rotate(-1.6deg) scale(.5)}70%{transform:rotate(-1.6deg) scale(1.08)}100%{transform:rotate(-1.6deg) scale(1)}}
   .word-card.tap-to-hear{cursor:pointer}
 
-  /* ---------- FEEDBACK ---------- */
   .feedback{min-height:58px;margin-top:clamp(10px,2.5vh,20px);font-family:'Baloo 2';font-weight:800;
     font-size:clamp(1.35rem,5.4vw,2rem);opacity:0;transform:scale(.7);text-align:center;padding:0 12px}
   .feedback.show{animation:fbPop .45s cubic-bezier(.34,1.56,.64,1) forwards}
@@ -107,7 +102,6 @@
   .feedback.listen{color:#1971C2;font-size:clamp(1.05rem,4.3vw,1.45rem)}
   @keyframes fbPop{to{opacity:1;transform:scale(1)}}
 
-  /* animated "I'm listening" bars */
   .bars{display:inline-flex;gap:4px;align-items:flex-end;height:26px;margin-right:10px;vertical-align:middle}
   .bars i{width:6px;border-radius:3px;background:#4DABF7;animation:wv .9s ease-in-out infinite}
   .bars i:nth-child(1){height:10px;animation-delay:-.2s}
@@ -119,7 +113,6 @@
 
   .heard{display:block;font-family:'Nunito';font-weight:700;font-size:.95rem;color:#8AA0B8;margin-top:3px}
 
-  /* ---------- CONTROLS ---------- */
   .controls{display:flex;align-items:center;gap:clamp(24px,7vw,50px);padding:16px 0 14px}
   .ctrl{display:flex;flex-direction:column;align-items:center;gap:10px}
   .ctrl-label{font-weight:800;font-size:.95rem;color:#3E5C76}
@@ -139,7 +132,6 @@
     box-shadow:0 7px 0 var(--yellow-d),0 14px 20px rgba(224,168,0,.3)}
   .btn-help:active:not(:disabled){box-shadow:0 2px 0 var(--yellow-d)}
 
-  /* ---------- PARENT CONTROLS (subtle, for grown-ups) ---------- */
   .parent-bar{display:flex;align-items:center;gap:10px;padding-bottom:clamp(14px,3vh,26px)}
   .parent-tag{font-weight:800;font-size:.68rem;letter-spacing:1.2px;text-transform:uppercase;color:#9FB3C8}
   .btn-parent{background:#fff;border:2px solid #CBD9E8;color:#5C7A9E;font-family:'Nunito',sans-serif;
@@ -153,7 +145,6 @@
     font-size:.85rem;padding:8px 14px;border-radius:12px;max-width:min(680px,90vw);text-align:center;display:none}
   .note.show{display:block}
 
-  /* ---------- CELEBRATION ---------- */
   .overlay{position:fixed;inset:0;z-index:60;display:none;place-items:center;background:rgba(214,240,255,.9);padding:20px}
   .overlay.show{display:grid}
   .celebrate{background:#fff;border-radius:34px;padding:clamp(28px,6vw,48px) clamp(24px,7vw,56px);text-align:center;
@@ -171,7 +162,6 @@
 </head>
 <body>
 
-<!-- background scene -->
 <div class="scene" aria-hidden="true">
   <svg class="sun" viewBox="0 0 120 120">
     <g fill="#FFD166">
@@ -244,7 +234,7 @@
     <div class="word-card" id="card">
       <span class="tape l"></span><span class="tape r"></span>
       <span class="say-label">👉 Say this word</span>
-      <div class="word" id="word">he</div>
+      <div class="word" id="word">the</div>
     </div>
   </main>
 
@@ -270,10 +260,9 @@
     <button class="btn-parent" id="parentBtn" aria-label="Parent: mark word correct and go to next">✓ Mark correct · next word</button>
   </div>
 
-  <p class="note" id="noSrNote">This browser can’t listen yet — try Chrome. Tap the word to hear it, and tap ? anytime.</p>
+  <p class="note" id="noSrNote">This browser can't listen yet — try Chrome. Tap the word to hear it, and tap ? anytime.</p>
 </div>
 
-<!-- celebration -->
 <div class="overlay" id="overlay">
   <div class="celebrate">
     <div class="big-owl owl mood-happy" aria-hidden="true">
@@ -296,7 +285,7 @@
       </svg>
     </div>
     <h2>You did it! 🎉</h2>
-    <p id="celebrateMsg">All 20 words — you’re a sight word star!</p>
+    <p id="celebrateMsg">All 20 words — you're a sight word star!</p>
     <button class="btn-again" id="againBtn">Play again</button>
   </div>
 </div>
@@ -307,10 +296,8 @@
 (function(){
   "use strict";
 
-  /* Cumulative word list.
-     If "ini" was intentional, replace "in" with "ini". */
   var WORDS = [
-    "he","I","at","and","a",
+    "the","I","at","and","a",
     "if","it","its","sit","in",
     "is","an","man","on","said",
     "am","as","not","did","this"
@@ -329,14 +316,13 @@
   }
 
   if(celebrateMsg){
-    celebrateMsg.textContent = "All " + WORDS.length + " words — you’re a sight word star!";
+    celebrateMsg.textContent = "All " + WORDS.length + " words — you're a sight word star!";
   }
 
   var GOOD=["Yay! You said it!","Great job! ⭐","Yes! That's right!","Awesome! 🎉","You did it!"];
   var TRY =["Almost! Try again! 💪","So close — try once more!","You can do it — try again!"];
   var pick=function(a){ return a[Math.floor(Math.random()*a.length)]; };
 
-  /* ---------- state ---------- */
   var deck=[], current="", state="idle", mastered=new Set(), moodTimer=null;
   var pendingTimer=null, fbKind=null;
 
@@ -350,7 +336,6 @@
     return a;
   }
 
-  /* ---------- chips ---------- */
   WORDS.forEach(function(w){
     var s=document.createElement("span");
     s.className="chip";
@@ -371,7 +356,6 @@
     });
   }
 
-  /* ---------- game flow ---------- */
   function setState(s){
     state=s;
     micBtn.disabled = s!=="idle";
@@ -473,7 +457,7 @@
     },2000);
   }
 
-  /* ---------- speech: say the word (TTS) ---------- */
+  /* ---------- TTS ---------- */
   var voices=[];
   if("speechSynthesis" in window){
     loadVoices();
@@ -489,11 +473,6 @@
         || null;
   }
 
-  /* TTS pronunciation fixes.
-     - "I" is spoken as "eye".
-     - "an" is spoken like the name Anne.
-     - "at" and "not" are spoken as just the word, with a period to help some voices release the final t.
-     - "a" is intentionally left as just the plain word. */
   var SPEECH_OVERRIDES = {
     "I": "eye",
     "i": "eye",
@@ -506,41 +485,28 @@
     if(Object.prototype.hasOwnProperty.call(SPEECH_OVERRIDES, w)){
       return SPEECH_OVERRIDES[w];
     }
-
     var key=(w||"").toLowerCase();
     if(Object.prototype.hasOwnProperty.call(SPEECH_OVERRIDES, key)){
       return SPEECH_OVERRIDES[key];
     }
-
     return w;
   }
 
   var speakTimer=null, lastSpeakAt=0, helpLockUntil=0;
 
   function cancelSpeech(){
-    if(speakTimer){
-      clearTimeout(speakTimer);
-      speakTimer=null;
-    }
-
-    if("speechSynthesis" in window){
-      try{ speechSynthesis.cancel(); }catch(e){}
-    }
+    if(speakTimer){ clearTimeout(speakTimer); speakTimer=null; }
+    if("speechSynthesis" in window){ try{ speechSynthesis.cancel(); }catch(e){} }
   }
 
   function speak(w){
     if(!("speechSynthesis" in window)) return;
-
     var now=Date.now();
-
-    /* Prevent duplicate tap/browser events from speaking twice. */
     if(now - lastSpeakAt < 800) return;
     lastSpeakAt=now;
 
     var text=speechTextFor(w);
     var u=new SpeechSynthesisUtterance(text);
-
-    /* Slightly slower speech helps short words and final consonants. */
     u.lang="en-US";
     u.rate=0.65;
     u.pitch=1.05;
@@ -549,25 +515,20 @@
     if(v) u.voice=v;
 
     cancelSpeech();
-
-    /* Small delay after cancel() helps some browsers speak reliably. */
     speakTimer=setTimeout(function(){
       speakTimer=null;
       try{ speechSynthesis.speak(u); }catch(e){}
     },40);
   }
 
-  /* ---------- speech: listen (STT) — robust + multiple attempts per press ---------- */
+  /* ---------- STT ---------- */
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if(!SR){
     note.classList.add("show");
     card.classList.add("tap-to-hear");
   }
 
-  /* One press = up to ~10 seconds of trying. */
   var LISTEN_MS = 10000;
-
-  /* Safety cap so a chatty engine can't loop forever. */
   var MAX_RESTARTS = 20;
 
   var micRec=null, isListening=false, windowTimer=null, listeningSince=0, restarts=0;
@@ -576,47 +537,26 @@
   function lastHeard(){
     if(!heard.length) return "";
     var u=[];
-    heard.forEach(function(x){
-      if(u.indexOf(x)===-1) u.push(x);
-    });
+    heard.forEach(function(x){ if(u.indexOf(x)===-1) u.push(x); });
     return u[u.length-1];
   }
 
-  /* normalize: lowercase, strip everything but letters ("s a i d" -> "said") */
-  function norm(s){
-    return (s||"").toLowerCase().replace(/[^a-z]/g,"");
-  }
+  function norm(s){ return (s||"").toLowerCase().replace(/[^a-z]/g,""); }
+  function tokens(s){ return (s||"").toLowerCase().replace(/[^a-z\s]/g," ").split(/\s+/).filter(Boolean); }
 
-  /* word tokens: for filler like "uh, said" */
-  function tokens(s){
-    return (s||"").toLowerCase().replace(/[^a-z\s]/g," ").split(/\s+/).filter(Boolean);
-  }
-
-  /* Levenshtein distance (only ever need small distances) */
   function lev(a,b){
     var m=a.length,n=b.length;
     if(Math.abs(m-n)>1) return 99;
-
     var d=[],i,j;
     for(i=0;i<=m;i++){d[i]=[i];}
     for(j=0;j<=n;j++){d[0][j]=j;}
-
-    for(i=1;i<=m;i++){
-      for(j=1;j<=n;j++){
-        d[i][j]=Math.min(
-          d[i-1][j]+1,
-          d[i][j-1]+1,
-          d[i-1][j-1]+(a.charAt(i-1)===b.charAt(j-1)?0:1)
-        );
-      }
+    for(i=1;i<=m;i++)for(j=1;j<=n;j++){
+      d[i][j]=Math.min(d[i-1][j]+1, d[i][j-1]+1,
+        d[i-1][j-1]+(a.charAt(i-1)===b.charAt(j-1)?0:1));
     }
-
     return d[m][n];
   }
 
-  /* A few common speech-to-text confusions.
-     "yes" is included for "if" as a workaround because some engines mishear it.
-     Remove "yes" from the list if you want stricter matching. */
   var ALIASES = {
     "i": ["eye"],
     "a": ["uh"],
@@ -629,70 +569,36 @@
 
   function tokenMatches(target, tok){
     var t = target.toLowerCase();
-
     if(tok === t) return true;
-
-    /* Never accept another word from this cumulative list as a substitute. */
-    if(LOWER_WORDS.indexOf(tok) !== -1 && tok !== t){
-      return false;
-    }
-
+    if(LOWER_WORDS.indexOf(tok) !== -1 && tok !== t) return false;
     var aliases = ALIASES[t];
-    if(aliases && aliases.indexOf(tok) !== -1){
-      return true;
-    }
-
-    /* Forgiving one-edit match for 3+ letter words. */
-    if(t.length >= 3 && tok.length >= 2 && lev(tok, t) <= 1){
-      return true;
-    }
-
+    if(aliases && aliases.indexOf(tok) !== -1) return true;
+    if(t.length >= 3 && tok.length >= 2 && lev(tok, t) <= 1) return true;
     return false;
   }
 
-  /* Forgiving but safe matching:
-     - "s a i d", "SAID!"  -> exact after normalization
-     - "uh, said"          -> target appears as a whole word
-     - common STT variants like "side" for "said"
-     - one-edit match for 3+ letter words
-     - NEVER accepts another word from this cumulative list as a substitute */
   function matches(target, raw){
     var t = target.toLowerCase();
     var n=norm(raw);
     var toks=tokens(raw);
 
     if(n === t) return true;
-
-    /* If the whole normalized transcript is another list word, reject it. */
-    if(n && n !== t && LOWER_WORDS.indexOf(n) !== -1){
-      return false;
-    }
+    if(n && n !== t && LOWER_WORDS.indexOf(n) !== -1) return false;
 
     for(var i=0;i<toks.length;i++){
-      if(tokenMatches(target, toks[i])){
-        return true;
-      }
+      if(tokenMatches(target, toks[i])) return true;
     }
 
-    /* Whole-string fuzzy match, e.g. "saidd" for "said". */
-    if(t.length >= 3 && n.length >= 2 && lev(n, t) <= 1){
-      return true;
-    }
-
+    if(t.length >= 3 && n.length >= 2 && lev(n, t) <= 1) return true;
     return false;
   }
 
   function showListeningUI(){
     fb.className="feedback show listen";
     fb.textContent="";
-
-    var w=document.createElement("span");
-    w.className="bars";
-    for(var i=0;i<5;i++){
-      w.appendChild(document.createElement("i"));
-    }
+    var w=document.createElement("span"); w.className="bars";
+    for(var i=0;i<5;i++){ w.appendChild(document.createElement("i")); }
     fb.appendChild(w);
-
     liveHeardEl=document.createElement("span");
     liveHeardEl.textContent="Take your time — try as many times as you need!";
     fb.appendChild(liveHeardEl);
@@ -704,74 +610,40 @@
     liveHeardEl.textContent='I heard "'+clean+'" — try again!';
   }
 
-  /* Always-safe teardown: re-enables buttons, stops the mic, clears timers. */
   function closeMic(){
     isListening=false;
-
-    if(windowTimer){
-      clearTimeout(windowTimer);
-      windowTimer=null;
-    }
-
-    var r=micRec;
-    micRec=null;
-    liveHeardEl=null;
-
-    if(r){
-      try{ r.abort(); }catch(e){}
-    }
-
+    if(windowTimer){ clearTimeout(windowTimer); windowTimer=null; }
+    var r=micRec; micRec=null; liveHeardEl=null;
+    if(r){ try{ r.abort(); }catch(e){} }
     micBtn.classList.remove("listening");
     micLabel.textContent="Say the word";
     owlMood(null);
   }
 
-  /* Hard stop: guarantees we never stay stuck in "listening". */
   function hardStop(){
     if(!isListening) return;
     closeMic();
     gentle("Almost! Try again!");
   }
 
-  /* Open one recognition session. A fresh instance each time = no zombie mics. */
   function openMic(){
     var rec;
-
-    try{
-      rec=new SR();
-    }catch(e){
-      closeMic();
-      gentle("Microphone unavailable — tap ? to hear it.");
-      return;
-    }
+    try{ rec=new SR(); }
+    catch(e){ closeMic(); gentle("Microphone unavailable — tap ? to hear it."); return; }
 
     micRec=rec;
     rec.lang="en-US";
-
-    /* Keep one press open for multiple tries. */
     rec.continuous=true;
-
-    /* Catch a match early, before the final transcript. */
     rec.interimResults=true;
-
     rec.maxAlternatives=5;
 
     rec.onresult=function(e){
       if(!isListening || micRec!==rec) return;
-
-      /* only scan NEW results (resultIndex) — no re-scanning everything each event */
       for(var i=e.resultIndex;i<e.results.length;i++){
         var alts=e.results[i];
-
         for(var j=0;j<alts.length;j++){
-          if(matches(current, alts[j].transcript)){
-            closeMic();
-            onCorrect();
-            return;
-          }
+          if(matches(current, alts[j].transcript)){ closeMic(); onCorrect(); return; }
         }
-
-        /* update the visible "heard" line only for final results (avoids flicker) */
         if(alts.isFinal && alts.length){
           heard.push(alts[0].transcript.toLowerCase().replace(/\s+/g," ").trim());
           updateLiveHeard(alts[0].transcript);
@@ -781,26 +653,16 @@
 
     rec.onerror=function(e){
       if(!isListening || micRec!==rec) return;
-
       if(e.error==="not-allowed"||e.error==="service-not-allowed"){
-        closeMic();
-        gentle("Please let me hear you! 🎤");
-        return;
+        closeMic(); gentle("Please let me hear you! 🎤"); return;
       }
-
       if(e.error==="audio-capture"){
-        closeMic();
-        gentle("Microphone unavailable — tap ? to hear it.");
-        return;
+        closeMic(); gentle("Microphone unavailable — tap ? to hear it."); return;
       }
-
-      /* no-speech / network / unknown: keep listening, onend decides what to do */
     };
 
     rec.onend=function(){
       if(!isListening || micRec!==rec) return;
-
-      /* still within the window? keep the mic open for another attempt */
       if((Date.now()-listeningSince) < LISTEN_MS && restarts < MAX_RESTARTS){
         restarts++;
         openMic();
@@ -810,36 +672,19 @@
       }
     };
 
-    try{
-      rec.start();
-    }catch(err){
-      closeMic();
-      gentle("Microphone unavailable — tap ? to hear it.");
-    }
+    try{ rec.start(); }
+    catch(err){ closeMic(); gentle("Microphone unavailable — tap ? to hear it."); }
   }
 
   function startListening(){
     if(!SR || state!=="idle") return;
-
-    /* stop the app's own voice so it can't be heard as an answer */
     cancelSpeech();
 
-    setState("listening");
-    hideBubble();
-    showListeningUI();
+    setState("listening"); hideBubble(); showListeningUI();
+    micBtn.classList.add("listening"); micLabel.textContent="Listening…"; owlMood("mood-listen");
+    isListening=true; listeningSince=Date.now(); restarts=0; heard=[];
 
-    micBtn.classList.add("listening");
-    micLabel.textContent="Listening…";
-    owlMood("mood-listen");
-
-    isListening=true;
-    listeningSince=Date.now();
-    restarts=0;
-    heard=[];
-
-    /* single hard stop for the whole press */
     windowTimer=setTimeout(hardStop, LISTEN_MS);
-
     openMic();
   }
 
@@ -848,11 +693,8 @@
 
   helpBtn.addEventListener("click", function(){
     if(state!=="idle") return;
-
     var now=Date.now();
     if(now < helpLockUntil) return;
-
-    /* Lock prevents rapid duplicate taps from causing double speech. */
     helpLockUntil = now + 1800;
 
     speak(current);
@@ -860,213 +702,101 @@
     owlMood("mood-happy",1000);
     showFeedback("Now say it!","hint");
 
-    setTimeout(function(){
-      if(state==="idle") clearFeedback();
-    },1800);
+    setTimeout(function(){ if(state==="idle") clearFeedback(); },1800);
   });
 
-  /* Parent fallback: count the current word as correct and move on. */
   $("parentBtn").addEventListener("click", function(){
     if(state==="listening") closeMic();
-    if(state==="feedback" && fbKind==="good") return; /* already advancing — ignore */
+    if(state==="feedback" && fbKind==="good") return;
     clearPending();
     onCorrect();
   });
 
-  card.addEventListener("click", function(){
-    if(!SR && state==="idle") speak(current);
-  });
-
+  card.addEventListener("click", function(){ if(!SR && state==="idle") speak(current); });
   $("againBtn").addEventListener("click", newGame);
-
-  $("resetBtn").addEventListener("click", function(){
-    stopCelebrate();
-    overlay.classList.remove("show");
-    newGame();
-  });
+  $("resetBtn").addEventListener("click", function(){ stopCelebrate(); overlay.classList.remove("show"); newGame(); });
 
   var bubbleHidden=false;
-  function hideBubble(){
-    if(!bubbleHidden){
-      bubbleHidden=true;
-      bubble.classList.add("hide");
-    }
-  }
-
+  function hideBubble(){ if(!bubbleHidden){ bubbleHidden=true; bubble.classList.add("hide"); } }
   setTimeout(hideBubble, 9000);
 
-  /* ---------- sounds (WebAudio) ---------- */
+  /* ---------- sounds ---------- */
   var actx=null;
-
   function ac(){
-    if(!actx){
-      try{
-        actx=new (window.AudioContext||window.webkitAudioContext)();
-      }catch(e){}
-    }
-
-    if(actx && actx.state==="suspended"){
-      actx.resume();
-    }
-
+    if(!actx){ try{ actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} }
+    if(actx && actx.state==="suspended") actx.resume();
     return actx;
   }
 
   function tone(f,t,d,type,vol){
-    var c=ac();
-    if(!c) return;
-
+    var c=ac(); if(!c) return;
     try{
-      var o=c.createOscillator();
-      var g=c.createGain();
-
-      o.type=type||"sine";
-      o.frequency.value=f;
-      o.connect(g);
-      g.connect(c.destination);
-
+      var o=c.createOscillator(), g=c.createGain();
+      o.type=type||"sine"; o.frequency.value=f; o.connect(g); g.connect(c.destination);
       var t0=c.currentTime+t;
-
       g.gain.setValueAtTime(0,t0);
       g.gain.linearRampToValueAtTime(vol||.18,t0+.02);
       g.gain.exponentialRampToValueAtTime(.001,t0+d);
-
-      o.start(t0);
-      o.stop(t0+d+.05);
+      o.start(t0); o.stop(t0+d+.05);
     }catch(e){}
   }
 
-  function sfxCorrect(){
-    [523.25,659.25,783.99,1046.5].forEach(function(f,i){
-      tone(f,i*.09,.28,"triangle",.2);
-    });
-  }
-
-  function sfxWrong(){
-    tone(311,0,.25,"sine",.14);
-    tone(247,.16,.3,"sine",.14);
-  }
-
-  function sfxHelp(){
-    tone(880,0,.12,"sine",.12);
-    tone(1318.5,.09,.16,"sine",.12);
-  }
-
-  function sfxWin(){
-    [523,659,784,1047,1319].forEach(function(f,i){
-      tone(f,i*.12,.3,"triangle",.2);
-    });
-
-    [523,659,784].forEach(function(f){
-      tone(f,.7,.6,"sine",.12);
-    });
-  }
-
+  function sfxCorrect(){ [523.25,659.25,783.99,1046.5].forEach(function(f,i){ tone(f,i*.09,.28,"triangle",.2); }); }
+  function sfxWrong(){ tone(311,0,.25,"sine",.14); tone(247,.16,.3,"sine",.14); }
+  function sfxHelp(){ tone(880,0,.12,"sine",.12); tone(1318.5,.09,.16,"sine",.12); }
+  function sfxWin(){ [523,659,784,1047,1319].forEach(function(f,i){ tone(f,i*.12,.3,"triangle",.2); });
+                     [523,659,784].forEach(function(f){ tone(f,.7,.6,"sine",.12); }); }
   document.addEventListener("pointerdown", function(){ ac(); }, {once:true});
 
-  /* ---------- confetti (capped so it can't run away) ---------- */
-  var cvs=$("confetti");
-  var ctx=cvs.getContext("2d");
-
+  /* ---------- confetti ---------- */
+  var cvs=$("confetti"), ctx=cvs.getContext("2d");
   var COLORS=["#FF6B6B","#FFD93D","#2EC4B6","#37B24D","#FF9F1C","#5AA9E6"];
   var MAX_PARTICLES=600;
-
   var parts=[], raf=null, celebTimer=null;
 
-  function resize(){
-    cvs.width=innerWidth;
-    cvs.height=innerHeight;
-  }
-
-  addEventListener("resize", resize);
-  resize();
+  function resize(){ cvs.width=innerWidth; cvs.height=innerHeight; }
+  addEventListener("resize", resize); resize();
 
   function burst(x,y,n){
-    if(parts.length > MAX_PARTICLES) return;   /* safety cap for low-end devices */
-
+    if(parts.length > MAX_PARTICLES) return;
     for(var i=0;i<n && parts.length<MAX_PARTICLES;i++){
-      var a=Math.random()*Math.PI*2;
-      var sp=Math.random()*11+4;
-
-      parts.push({
-        x:x, y:y,
-        vx:Math.cos(a)*sp,
-        vy:Math.sin(a)*sp-6,
-        g:.32,
-        s:Math.random()*7+4,
-        c:COLORS[i%COLORS.length],
-        r:Math.random()*6.28,
-        vr:(Math.random()-.5)*.35,
-        life:90+Math.random()*60
-      });
+      var a=Math.random()*Math.PI*2, sp=Math.random()*11+4;
+      parts.push({x:x,y:y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-6,g:.32,
+        s:Math.random()*7+4,c:COLORS[i%COLORS.length],r:Math.random()*6.28,
+        vr:(Math.random()-.5)*.35,life:90+Math.random()*60});
     }
-
     if(!raf) loop();
   }
 
   function loop(){
     ctx.clearRect(0,0,cvs.width,cvs.height);
-
-    parts=parts.filter(function(p){
-      return p.life>0 && p.y<cvs.height+60;
-    });
-
+    parts=parts.filter(function(p){ return p.life>0 && p.y<cvs.height+60; });
     for(var i=0;i<parts.length;i++){
       var p=parts[i];
-
-      p.vy+=p.g;
-      p.x+=p.vx;
-      p.y+=p.vy;
-      p.vx*=.992;
-      p.r+=p.vr;
-      p.life--;
-
-      ctx.save();
-      ctx.translate(p.x,p.y);
-      ctx.rotate(p.r);
-
-      ctx.globalAlpha=Math.min(1,p.life/40);
-      ctx.fillStyle=p.c;
-
-      ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*1.6);
-      ctx.restore();
+      p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.vx*=.992; p.r+=p.vr; p.life--;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r);
+      ctx.globalAlpha=Math.min(1,p.life/40); ctx.fillStyle=p.c;
+      ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*1.6); ctx.restore();
     }
-
-    if(parts.length){
-      raf=requestAnimationFrame(loop);
-    } else {
-      raf=null;
-      ctx.clearRect(0,0,cvs.width,cvs.height);
-    }
+    if(parts.length){ raf=requestAnimationFrame(loop); }
+    else{ raf=null; ctx.clearRect(0,0,cvs.width,cvs.height); }
   }
 
   /* ---------- celebration ---------- */
   function celebrate(){
-    stopCelebrate();               /* never let the timer stack */
+    stopCelebrate();
     clearPending();
     cancelSpeech();
-
-    setState("feedback");
-    clearFeedback();
-
-    overlay.classList.add("show");
-    sfxWin();
-
+    setState("feedback"); clearFeedback();
+    overlay.classList.add("show"); sfxWin();
     burst(cvs.width/2, cvs.height*.3, 160);
-
     celebTimer=setInterval(function(){
       burst(Math.random()*cvs.width, cvs.height*.2+Math.random()*90, 70);
     },700);
   }
 
-  function stopCelebrate(){
-    if(celebTimer){
-      clearInterval(celebTimer);
-      celebTimer=null;
-    }
-  }
+  function stopCelebrate(){ if(celebTimer){ clearInterval(celebTimer); celebTimer=null; } }
 
-  /* ---------- go! ---------- */
   newGame();
 })();
 </script>
